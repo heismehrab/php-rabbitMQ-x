@@ -13,7 +13,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "heismehrab\\PhpRabbitMq" : "src/"
+            "HeIsMehrab\\PhpRabbitMq\\" : "src/"
         }
     }
 }
