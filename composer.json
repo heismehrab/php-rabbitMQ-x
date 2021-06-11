@@ -1,0 +1,19 @@
+{
+    "name": "heismehrab/php-rabbitmq-x",
+    "type": "library",
+    "require": {
+        "php-amqplib/php-amqplib": ">=3.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "heismehrab",
+            "email": "hedayatmanesh.mehrab@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "heismehrab\\PhpRabbitMq" : "src/"
+        }
+    }
+}
