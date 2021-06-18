@@ -3,6 +3,7 @@
 namespace HeIsMehrab\PhpRabbitMq\Services\RabbitMQ;
 
 use Exception;
+use PhpAmqpLib\Channel\AMQPChannel;
 use HeIsMehrab\PhpRabbitMq\Config\Env;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
@@ -20,19 +21,34 @@ class RabbitMQService
      * 
      * @var AMQPStreamConnection
      */
-    public static $connection;
+    private static $connection;
 
     /**
      * Keep AMQPStreamConnection channel.
      * 
-     * @var static AMQPStreamConnection
+     * @var static AMQPChannel
      */
-    public static $channel;
+    private static $channel;
+
+    /**
+     * Get an instance of Rabbit node,
+     * SingleTone mode.
+     *
+     * @return RabbitMQService|AMQPChannel
+     */
+    public static function node()
+    {
+        if (is_null(static::$channel)) {
+            new self();
+        }
+
+        return static::$channel;
+    }
 
     /**
      * RabbitMQService constructor.
      */
-    public function __construct()
+    private function __construct()
     {
         // Create Connection with RabbitMQ.
         static::$connection = new AMQPStreamConnection(
@@ -46,6 +62,8 @@ class RabbitMQService
     }
 
     /**
+     * RabbitMQService destructor.
+     *
      * @throws Exception
      */
     public function __destruct()
