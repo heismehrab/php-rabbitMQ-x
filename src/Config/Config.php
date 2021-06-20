@@ -73,8 +73,19 @@ class Config
      */
     public const EXCHANGES = [
 //        'default' => [
-//            'Q1',
-//            'Q2'
-//        ]
+//            'type' => self::EXCHANGE_TYPE_FANOUT,
+//            'queues' => [
+//                'Q1',
+//                'Q2'
+//            ]
+//        ],
+//
+//        'notifications' => [
+//            'type' => self::EXCHANGE_TYPE_DIRECT,
+//            'queues' => [
+//                'Q3',
+//                'Q4'
+//            ]
+//        ],
     ];
 }
