@@ -2,7 +2,12 @@
 
 namespace HeIsMehrab\PhpRabbitMq\Core;
 
+use Exception, InvalidArgumentException;
+
 use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Message\AMQPMessage;
+
+use HeIsMehrab\PhpRabbitMq\Config\Config;
 use HeIsMehrab\PhpRabbitMq\Services\RabbitMQ\RabbitMQService;
 
 /**
@@ -26,7 +31,28 @@ class Producer
      *
      * @var string $message
      */
-    protected $message;
+    public $message;
+
+    /**
+     * Keep exchanges.
+     *
+     * @var array $exchanges
+     */
+    public $exchanges = Config::EXCHANGES;
+
+    /**
+     * Keep exchange type.
+     *
+     * @var string $defaultExchange
+     */
+    public $defaultExchange = Config::DEFAULT_EXCHANGE;
+
+    /**
+     * Keep queues.
+     *
+     * @var string $queues
+     */
+    public $queues = Config::QUEUES;
 
     /**
      * Producer constructor.
@@ -40,6 +66,8 @@ class Producer
      * Set the message.
      *
      * @param string $message
+     *
+     * @return void
      */
     public function setMessage(string $message)
     {
@@ -47,19 +75,123 @@ class Producer
     }
 
     /**
-     * Produce and message/task to Rabbit queue.
+     * Set the exchanges.
      *
-     * @param string|null $queue
-     * @param string|null $exchange
-     * @param string|null $exchangeType
-     * @param string|null $topic
+     * @param array $exchanges
+     *
+     * @return void
      */
-    public function sendToQueue(
-        string $queue = null,
-        string $exchange = null,
-        string $exchangeType = null,
-        string $topic = null
-    ) {
-        //
+    public function setExchanges(array $exchanges)
+    {
+       $this->exchanges = $exchanges;
+    }
+
+    /**
+     * Set the default exchange.
+     *
+     * @param string $name
+     *
+     * @return void
+     */
+    public function setDefaultExchange(string $name)
+    {
+        $this->defaultExchange = $name;
+    }
+
+    /**
+     * Set the queues.
+     *
+     * @param string $queues
+     *
+     * @return void
+     */
+    public function setQueues(string $queues)
+    {
+        $this->queues = $queues;
+    }
+
+    /**
+     * Produce messages/tasks to Rabbit queue.
+     *
+     * @param string $queue
+     * Queue name or a routing key, depends on
+     * your queue and exchange configuration.
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
+    public function sendToQueue(string $queue = '')
+    {
+        // Declare Queues.
+        $this->declareQueues();
+
+        // Declare exchanges.
+        $this->declareExchanges();
+
+        // Format message with
+        // active acknowledgement.
+        $message = new AMQPMessage(
+            $this->message,
+            ['delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT]
+        );
+
+        $this->node->basic_publish($message, $this->defaultExchange, $queue);
+
+        // Remove un-used data.
+        unset($message);
+    }
+
+    /**
+     * Declare defined queues.
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
+    private function declareQueues()
+    {
+        if (! is_array($this->queues)) {
+            $errorMessage = 'argument queues must be array, not %s';
+
+            throw new InvalidArgumentException(sprintf($errorMessage, gettype($this->queues)));
+        }
+
+        if (! count($this->queues)) {
+            $errorMessage = 'argument queues can not be empty or Null';
+
+            throw new Exception($errorMessage);
+        }
+
+        foreach ($this->queues as $queue) {
+            $this->node->queue_declare(
+                $queue,
+                false,
+                true,
+                false,
+                false
+            );
+        }
+    }
+
+    /**
+     * Declare defined exchanges.
+     *
+     * @return void
+     */
+    private function declareExchanges() : void
+    {
+        if (count($this->exchanges)) {
+
+            foreach ($this->exchanges as $name => $data) {
+                $this->node->exchange_declare(
+                    $name,
+                    $data['type'],
+                    false,
+                    false,
+                    false
+                );
+            }
+        }
     }
 }
