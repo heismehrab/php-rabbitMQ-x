@@ -66,7 +66,7 @@ class RabbitMQService
      *
      * @throws Exception
      */
-    public function __destruct()
+    public static function closeConnections()
     {
         static::$channel->close();
         static::$connection->close();
