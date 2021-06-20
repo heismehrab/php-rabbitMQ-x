@@ -50,7 +50,8 @@ class Producer extends BaseHandler
             ['delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT]
         );
 
-        $this->node->basic_publish($message, $this->defaultExchange, $queue);
+        $this->node
+            ->basic_publish($message, $this->defaultExchange, $queue);
 
         // Remove un-used data.
         unset($message);
