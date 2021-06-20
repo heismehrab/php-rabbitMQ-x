@@ -37,37 +37,28 @@ class Config
     ];
 
     /**
-     * Define the default type of your exchange,
-     * for now you can use null, fanout and direct.
+     * Keep the default exchange, that
+     * must be the one the indexes of EXCHANGES array
+     * defined by yours.
      *
-     * Null: for RabbitMQ instance without any exchanges.
-     *
-     * Fanout: for RabbitMQ instance with fanout exchange,
-     * witch use the values of array EXCHANGES (see the constants below),
-     * if you define more than one index in that array, system will
-     * merge the all its values together.
-     *
-     * Direct: for RabbitMQ instance with direct exchange,
-     * witch use the EXCHANGES array (see the constants below),
-     * assume its indexes as a exchange names and its values
-     * as queue names.
-     *
-     * @var string EXCHANGE_TYPE
+     * @var string DEFAULT_EXCHANGE
      */
     public const DEFAULT_EXCHANGE = null;
 
     /**
      * An associative array witch defines the
-     * exchanges and its related queues;
-     * array indexes are exchange names and its values (an array of queues)
-     * is queue names.
+     * exchanges and its related type and queues;
+     * array indexes are exchange names and its values (an array of data)
+     * is type and queue names.
      *
      * this config affected when you
      * start to work with RabbitMQ.
      *
-     * this is array is useful for
-     * exchanges with type DIRECT, so Leave this array empty if you dont want
-     * to use DIRECT exchange
+     * type Null: for RabbitMQ instance without any exchanges.
+     *
+     * type Fanout: for RabbitMQ instance with fanout exchange.
+     *
+     * type Direct: for RabbitMQ instance with direct exchange.
      *
      * @var array EXCHANGES
      */
