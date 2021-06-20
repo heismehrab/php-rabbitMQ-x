@@ -153,4 +153,34 @@ abstract class BaseHandler
             }
         }
     }
+
+    /**
+     * Bind queues and exchanges together.
+     *
+     * @return void
+     */
+    protected function bindExchangesAndQueues()
+    {
+        if (count($this->exchanges)) {
+
+            foreach ($this->exchanges as $name => $data) {
+
+                foreach ($data['queues'] as $queue) {
+
+                    // bind with routing key.
+                    if (count($data['routingKeys'])) {
+
+                        foreach ($data['routingKeys'] as $routingKey) {
+                            $this->node->queue_bind($queue, $name, $routingKey);
+                        }
+
+                        continue;
+                    }
+
+                    // Bind without routing key.
+                    $this->node->queue_bind($queue, $name, '');
+                }
+            }
+        }
+    }
 }
