@@ -79,4 +79,16 @@ class Config
 //            ]
 //        ],
     ];
+
+    /**
+     * Keep array of queues.
+     *
+     * @var array $queues.
+     */
+    public const QUEUES = [
+//        'Q1',
+//        'Q2',
+//        'Q3',
+//        'Q4'
+    ];
 }
