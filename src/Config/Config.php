@@ -43,7 +43,7 @@ class Config
      *
      * @var string DEFAULT_EXCHANGE
      */
-    public const DEFAULT_EXCHANGE = null;
+    public const DEFAULT_EXCHANGE = '';
 
     /**
      * An associative array witch defines the
