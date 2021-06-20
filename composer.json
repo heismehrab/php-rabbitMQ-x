@@ -2,7 +2,8 @@
     "name": "heismehrab/php-rabbitmq-x",
     "type": "library",
     "require": {
-        "php-amqplib/php-amqplib": ">=3.0"
+        "php-amqplib/php-amqplib": ">=3.0",
+        "ext-json": "*"
     },
     "license": "MIT",
     "authors": [
