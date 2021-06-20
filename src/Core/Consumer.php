@@ -2,7 +2,7 @@
 
 namespace HeIsMehrab\PhpRabbitMq\Core;
 
-use PhpAmqpLib\Channel\AMQPChannel;
+use Exception;
 use HeIsMehrab\PhpRabbitMq\Services\RabbitMQ\RabbitMQService;
 
 /**
@@ -12,15 +12,8 @@ use HeIsMehrab\PhpRabbitMq\Services\RabbitMQ\RabbitMQService;
  *
  * @package HeIsMehrab\PhpRabbitMq\Core
  */
-class Consumer
+class Consumer extends BaseHandler
 {
-    /**
-     * Keep instance of RabbitMQ.
-     *
-     * @var RabbitMQService|AMQPChannel $node
-     */
-    private $node;
-
     public function __construct()
     {
         $this->node = RabbitMQService::node();
@@ -29,19 +22,47 @@ class Consumer
     /**
      * Produce and message/task to Rabbit queue.
      *
-     * @param string|null $queue
-     * @param string|null $exchange
-     * @param string|null $exchangeType
-     * @param string|null $topic
-     * @param callable $callBack
+     * @param string $queue
+     * @param string $routingKey
+     * @param callable $callback
+     *
+     * @return void
+     *
+     * @throws Exception
      */
     public function listen(
-        string $queue = null,
-        string $exchange = null,
-        string $exchangeType = null,
-        string $topic = null,
-        callable $callBack
+        string $queue = '',
+        string $routingKey = '',
+        callable $callback
     ) {
-        //
+        // Declare Queues.
+        $this->declareQueues();
+
+        // Declare exchanges.
+        $this->declareExchanges();
+
+        // Bind queues and exchanges.
+        $this->bindExchangesAndQueues();
+
+        // Active qos for fair dispatching.
+        $this->node->basic_qos(null, 1, null);
+
+        // Consume message
+        $this->node->basic_consume(
+            $queue,
+            '',
+            false,
+            false,
+            false,
+            false,
+            $callback
+        );
+
+        while ($this->node->is_open()) {
+            $this->node->wait();
+        }
+
+        // TODO. Handle memory usage and close
+        // TODO. RabbitMQ connections if needed.
     }
 }
