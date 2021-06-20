@@ -178,7 +178,7 @@ abstract class BaseHandler
                     }
 
                     // Bind without routing key.
-                    $this->node->queue_bind($queue, $name, '');
+                    $this->node->queue_bind($queue, $name);
                 }
             }
         }
