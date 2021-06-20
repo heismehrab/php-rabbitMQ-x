@@ -45,7 +45,8 @@ class Consumer extends BaseHandler
         $this->bindExchangesAndQueues();
 
         // Active qos for fair dispatching.
-        $this->node->basic_qos(null, 1, null);
+        $this->node
+            ->basic_qos(null, 1, null);
 
         // Consume message
         $this->node->basic_consume(
