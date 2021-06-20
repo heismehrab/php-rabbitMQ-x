@@ -68,7 +68,8 @@ class Config
 //            'queues' => [
 //                'Q1',
 //                'Q2'
-//            ]
+//            ],
+//            'routingKeys' => []
 //        ],
 //
 //        'notifications' => [
@@ -76,6 +77,10 @@ class Config
 //            'queues' => [
 //                'Q3',
 //                'Q4'
+//            ],
+//            'routingKeys' => [
+//                'high',
+//                'low'
 //            ]
 //        ],
     ];
