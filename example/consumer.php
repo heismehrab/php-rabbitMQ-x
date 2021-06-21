@@ -5,7 +5,9 @@ use HeIsMehrab\PhpRabbitMq\Core\Consumer;
 // This file is an example of working
 // with this package.
 
-$consumer = new Consumer();
+$configuration = require_once __DIR__ . '/../src/Config/config.php';
+
+$consumer = new Consumer($configuration);
 
 $callBack = function ($message) {
     echo $message->body;

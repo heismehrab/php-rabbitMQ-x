@@ -2,7 +2,8 @@
 
 namespace HeIsMehrab\PhpRabbitMq\Core;
 
-use Exception;
+use {Exception, ErrorException};
+
 use HeIsMehrab\PhpRabbitMq\Services\RabbitMQ\RabbitMQService;
 
 /**
@@ -14,27 +15,47 @@ use HeIsMehrab\PhpRabbitMq\Services\RabbitMQ\RabbitMQService;
  */
 class Consumer extends BaseHandler
 {
-    public function __construct()
+    /**
+     * Keep RabbitMQ configuration.
+     *
+     * @var null|array
+     */
+    private static $configuration = null;
+
+    /**
+     * Consumer constructor.
+     *
+     * @param array $configFile
+     */
+    public function __construct(array $configFile)
     {
-        $this->node = RabbitMQService::node();
+        static::$configuration = $configFile;
+
+        $this->node = RabbitMQService::node($configFile);
+    }
+
+    /**
+     * Get RabbitMQ configuration.
+     *
+     * @return array|null
+     */
+    public static function getConfigurations(): ?array
+    {
+        return static::$configuration;
     }
 
     /**
      * Produce and message/task to Rabbit queue.
      *
      * @param string $queue
-     * @param string $routingKey
      * @param callable $callback
      *
      * @return void
      *
-     * @throws Exception
+     * @throws ErrorException|Exception
      */
-    public function listen(
-        string $queue = '',
-        string $routingKey = '',
-        callable $callback
-    ) {
+    public function listen(string $queue = '', callable $callback)
+    {
         // Declare Queues.
         $this->declareQueues();
 
@@ -45,8 +66,11 @@ class Consumer extends BaseHandler
         $this->bindExchangesAndQueues();
 
         // Active qos for fair dispatching.
-        $this->node
-            ->basic_qos(null, 1, null);
+        $this->node->basic_qos(
+                static::$configuration['prefetch_size'],
+                static::$configuration['prefetch_count'],
+                static::$configuration['global']
+        );
 
         // Consume message
         $this->node->basic_consume(

@@ -5,9 +5,9 @@ use HeIsMehrab\PhpRabbitMq\Core\Producer;
 // This file is an example of working
 // with this package.
 
-$producer = new Producer();
+$configuration = require_once __DIR__ . '/../src/Config/config.php';
 
-$producer->setDefaultExchange('');
+$producer = new Producer($configuration);
 
 $producer->setMessage(json_encode([
     'success' => true,
@@ -15,7 +15,7 @@ $producer->setMessage(json_encode([
 ]));
 
 try {
-    $producer->sendToQueue('test_queue');
+    $producer->sendToQueue('test_queue', 'log');
 } catch (Exception $e) {
     echo $e->getMessage();
 }

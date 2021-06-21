@@ -2,11 +2,10 @@
 
 namespace HeIsMehrab\PhpRabbitMq\Core;
 
-use Exception, InvalidArgumentException;
-
 use PhpAmqpLib\Channel\AMQPChannel;
 
-use HeIsMehrab\PhpRabbitMq\Config\Config;
+use {Exception, InvalidArgumentException};
+
 use HeIsMehrab\PhpRabbitMq\Services\RabbitMQ\RabbitMQService;
 
 /**
@@ -33,25 +32,14 @@ abstract class BaseHandler
     public $message;
 
     /**
-     * Keep exchanges.
+     * Get RabbitMQ configuration.
      *
-     * @var array $exchanges
+     * @return array|null
      */
-    public $exchanges = Config::EXCHANGES;
-
-    /**
-     * Keep exchange type.
-     *
-     * @var string $defaultExchange
-     */
-    public $defaultExchange = Config::DEFAULT_EXCHANGE;
-
-    /**
-     * Keep queues.
-     *
-     * @var string $queues
-     */
-    public $queues = Config::QUEUES;
+    public static function getConfigurations(): ?array
+    {
+        return null;
+    }
 
     /**
      * Set the message.
@@ -66,42 +54,6 @@ abstract class BaseHandler
     }
 
     /**
-     * Set the exchanges.
-     *
-     * @param array $exchanges
-     *
-     * @return void
-     */
-    public function setExchanges(array $exchanges)
-    {
-        $this->exchanges = $exchanges;
-    }
-
-    /**
-     * Set the default exchange.
-     *
-     * @param string $name
-     *
-     * @return void
-     */
-    public function setDefaultExchange(string $name)
-    {
-        $this->defaultExchange = $name;
-    }
-
-    /**
-     * Set the queues.
-     *
-     * @param string $queues
-     *
-     * @return void
-     */
-    public function setQueues(string $queues)
-    {
-        $this->queues = $queues;
-    }
-
-    /**
      * Declare defined queues.
      *
      * @throws Exception
@@ -110,19 +62,21 @@ abstract class BaseHandler
      */
     protected function declareQueues()
     {
-        if (! is_array($this->queues)) {
+        $queues = static::getConfigurations()['queues'];
+
+        if (! is_array($queues)) {
             $errorMessage = 'argument queues must be array, not %s';
 
-            throw new InvalidArgumentException(sprintf($errorMessage, gettype($this->queues)));
+            throw new InvalidArgumentException(sprintf($errorMessage, gettype($queues)));
         }
 
-        if (! count($this->queues)) {
+        if (! count($queues)) {
             $errorMessage = 'argument queues can not be empty or Null';
 
             throw new Exception($errorMessage);
         }
 
-        foreach ($this->queues as $queue) {
+        foreach ($queues as $queue) {
             $this->node->queue_declare(
                 $queue,
                 false,
@@ -140,9 +94,11 @@ abstract class BaseHandler
      */
     protected function declareExchanges() : void
     {
-        if (count($this->exchanges)) {
+        $exchanges = static::getConfigurations()['exchanges'];
 
-            foreach ($this->exchanges as $name => $data) {
+        if (count($exchanges)) {
+
+            foreach ($exchanges as $name => $data) {
                 $this->node->exchange_declare(
                     $name,
                     $data['type'],
@@ -161,24 +117,26 @@ abstract class BaseHandler
      */
     protected function bindExchangesAndQueues()
     {
-        if (count($this->exchanges)) {
+        $exchanges = static::getConfigurations()['exchanges'];
 
-            foreach ($this->exchanges as $name => $data) {
+        if (count($exchanges)) {
 
-                foreach ($data['queues'] as $queue) {
+            foreach ($exchanges as $exchangeName => $details) {
+
+                foreach ($details['queues'] as $queueName => $routingKeys) {
 
                     // bind with routing key.
-                    if (count($data['routingKeys'])) {
+                    if (count($routingKeys)) {
 
-                        foreach ($data['routingKeys'] as $routingKey) {
-                            $this->node->queue_bind($queue, $name, $routingKey);
+                        foreach ($routingKeys as $routingKey) {
+                            $this->node->queue_bind($queueName, $exchangeName, $routingKey);
                         }
 
                         continue;
                     }
 
                     // Bind without routing key.
-                    $this->node->queue_bind($queue, $name);
+                    $this->node->queue_bind($queueName, $exchangeName);
                 }
             }
         }

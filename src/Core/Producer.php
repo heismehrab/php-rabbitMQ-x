@@ -3,7 +3,9 @@
 namespace HeIsMehrab\PhpRabbitMq\Core;
 
 use Exception;
+
 use PhpAmqpLib\Message\AMQPMessage;
+
 use HeIsMehrab\PhpRabbitMq\Services\RabbitMQ\RabbitMQService;
 
 /**
@@ -15,13 +17,33 @@ use HeIsMehrab\PhpRabbitMq\Services\RabbitMQ\RabbitMQService;
  */
 class Producer extends BaseHandler
 {
+    /**
+     * Keep RabbitMQ configuration.
+     *
+     * @var null|array
+     */
+    private static $configuration = null;
 
     /**
      * Producer constructor.
+     *
+     * @param array $configFile
      */
-    public function __construct()
+    public function __construct(array $configFile)
     {
-        $this->node = RabbitMQService::node();
+        static::$configuration = $configFile;
+
+        $this->node = RabbitMQService::node($configFile);
+    }
+
+    /**
+     * Get RabbitMQ configuration.
+     *
+     * @return array|null
+     */
+    public static function getConfigurations(): ?array
+    {
+        return static::$configuration;
     }
 
     /**
@@ -31,11 +53,13 @@ class Producer extends BaseHandler
      * Queue name or a routing key, depends on
      * your queue and exchange configuration.
      *
+     * @param string $exchange
+     *
      * @return void
      *
      * @throws Exception
      */
-    public function sendToQueue(string $queue = '')
+    public function sendToQueue(string $queue = '', string $exchange = '')
     {
         // Declare Queues.
         $this->declareQueues();
@@ -51,7 +75,7 @@ class Producer extends BaseHandler
         );
 
         $this->node
-            ->basic_publish($message, $this->defaultExchange, $queue);
+            ->basic_publish($message, $exchange, $queue);
 
         // Remove un-used data.
         unset($message);
