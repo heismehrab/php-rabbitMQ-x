@@ -147,7 +147,7 @@ abstract class BaseHandler
                     $name,
                     $data['type'],
                     false,
-                    false,
+                    true,
                     false
                 );
             }
