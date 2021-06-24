@@ -4,7 +4,7 @@ namespace HeIsMehrab\PhpRabbitMq\Core;
 
 use PhpAmqpLib\Channel\AMQPChannel;
 
-use {Exception, InvalidArgumentException};
+use Exception, InvalidArgumentException;
 
 use HeIsMehrab\PhpRabbitMq\Services\RabbitMQ\RabbitMQService;
 

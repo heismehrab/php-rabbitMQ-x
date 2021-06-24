@@ -2,7 +2,7 @@
 
 namespace HeIsMehrab\PhpRabbitMq\Core;
 
-use {Exception, ErrorException};
+use Exception, ErrorException;
 
 use HeIsMehrab\PhpRabbitMq\Services\RabbitMQ\RabbitMQService;
 
