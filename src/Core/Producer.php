@@ -75,7 +75,7 @@ class Producer extends BaseHandler
         );
 
         $this->node
-            ->basic_publish($message, $exchange, $queue);
+            ->basic_publish($message, $exchange, $queueOrRoutingKey);
 
         // Remove un-used data.
         unset($message);
