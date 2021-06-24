@@ -49,7 +49,7 @@ class Producer extends BaseHandler
     /**
      * Produce messages/tasks to Rabbit queue.
      *
-     * @param string $queue
+     * @param string $queueOrRoutingKey
      * Queue name or a routing key, depends on
      * your queue and exchange configuration.
      *
@@ -59,7 +59,7 @@ class Producer extends BaseHandler
      *
      * @throws Exception
      */
-    public function sendToQueue(string $queue = '', string $exchange = '')
+    public function sendToQueue(string $queueOrRoutingKey = '', string $exchange = '')
     {
         // Declare Queues.
         $this->declareQueues();
