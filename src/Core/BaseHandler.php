@@ -54,7 +54,8 @@ abstract class BaseHandler
     }
 
     /**
-     * Declare defined queues.
+     * Declare defined queues and set
+     * DLXs (dead letter exchanges) if exists.
      *
      * @throws Exception
      *
