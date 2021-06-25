@@ -80,9 +80,31 @@ return [
      * in *exchanges* array (see index exchanges above)
      */
     'queues' => [
-        'Q1',
-        'Q2',
-        'Q3',
-        'Q4'
+        'Q1' => [
+            'exchange' => [
+                'name' => 'foo',
+                'routing_keys' => [ // With routing keys.
+                    'key1',
+                    'key2'
+                ]
+            ]
+        ],
+
+        'Q2' => [
+            'exchange' => [
+                'name' => 'bar',
+                'routing_keys' => [ // With routing keys.
+                    'key1'
+                ]
+            ]
+        ],
+
+        'Q3' => [
+            'exchange' => [] // Without exchange.
+        ],
+
+        'Q4' => [
+            'exchange' => [] // Without exchange.
+        ]
     ]
 ];

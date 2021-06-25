@@ -76,13 +76,27 @@ abstract class BaseHandler
             throw new Exception($errorMessage);
         }
 
-        foreach ($queues as $queue) {
+        foreach ($queues as $queueName => $details) {
+            $arguments = [];
+
+            // handle DLX (dead letter exchange).
+            if (count($exchange = $details['exchange'])) {
+                $arguments['x-dead-letter-exchange'] = $exchange['name'];
+
+                // Set routing key for exchanges if declared.
+                foreach ($exchange['routing_keys'] as $routingKey) {
+                    $arguments['x-dead-letter-routing-key'] = $routingKey;
+                }
+            }
+
             $this->node->queue_declare(
-                $queue,
+                $queueName,
                 false,
                 true,
                 false,
-                false
+                false,
+                false,
+                $arguments
             );
         }
     }
