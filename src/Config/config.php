@@ -82,20 +82,15 @@ return [
     'queues' => [
         'Q1' => [
             'exchange' => [
-                'name' => 'foo',
-                'routing_keys' => [ // With routing keys.
-                    'key1',
-                    'key2'
-                ]
+                'name' => 'foo', // With exchange.
+                'routing_key' => 'key1' // With routing key.
             ]
         ],
 
         'Q2' => [
             'exchange' => [
-                'name' => 'bar',
-                'routing_keys' => [ // With routing keys.
-                    'key1'
-                ]
+                'name' => 'bar', // With exchange.
+                'routing_key' => '' // Without routing keys.
             ]
         ],
 

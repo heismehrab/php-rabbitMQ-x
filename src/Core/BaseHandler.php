@@ -84,8 +84,8 @@ abstract class BaseHandler
                 $arguments['x-dead-letter-exchange'] = $exchange['name'];
 
                 // Set routing key for exchanges if declared.
-                foreach ($exchange['routing_keys'] as $routingKey) {
-                    $arguments['x-dead-letter-routing-key'] = $routingKey;
+                if (! empty($exchange['routing_key'])) {
+                    $arguments['x-dead-letter-routing-key'] = $exchange['routing_key'];
                 }
             }
 
