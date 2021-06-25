@@ -81,7 +81,7 @@ abstract class BaseHandler
             $arguments = [];
 
             // handle DLX (dead letter exchange).
-            if (count($exchange = $details['exchange'])) {
+            if (count($exchange = $details['dead_letter_exchange'])) {
                 $arguments['x-dead-letter-exchange'] = $exchange['name'];
 
                 // Set routing key for exchanges if declared.

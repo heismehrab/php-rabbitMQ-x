@@ -42,8 +42,6 @@ return [
      * this config affected when you
      * start to work with RabbitMQ.
      *
-     * type Null: for RabbitMQ instance without any exchanges.
-     *
      * type Fanout: for RabbitMQ instance with fanout exchange.
      *
      * type Direct: for RabbitMQ instance with direct exchange.
@@ -81,25 +79,25 @@ return [
      */
     'queues' => [
         'Q1' => [
-            'exchange' => [
+            'dead_letter_exchange' => [
                 'name' => 'foo', // With exchange.
                 'routing_key' => 'key1' // With routing key.
             ]
         ],
 
         'Q2' => [
-            'exchange' => [
+            'dead_letter_exchange' => [
                 'name' => 'bar', // With exchange.
                 'routing_key' => '' // Without routing keys.
             ]
         ],
 
         'Q3' => [
-            'exchange' => [] // Without exchange.
+            'dead_letter_exchange' => [] // Without exchange.
         ],
 
         'Q4' => [
-            'exchange' => [] // Without exchange.
+            'dead_letter_exchange' => [] // Without exchange.
         ]
     ]
 ];
