@@ -7,6 +7,7 @@ use PhpAmqpLib\Channel\AMQPChannel;
 use Exception, InvalidArgumentException;
 
 use HeIsMehrab\PhpRabbitMq\Services\RabbitMQ\RabbitMQService;
+use PhpAmqpLib\Wire\AMQPTable;
 
 /**
  * Class BaseHandler.
@@ -81,7 +82,10 @@ abstract class BaseHandler
             $arguments = [];
 
             // handle DLX (dead letter exchange).
-            if (count($exchange = $details['dead_letter_exchange'])) {
+            if (
+                count($details) &&
+                count($exchange = $details['dead_letter_exchange'])
+            ) {
                 $arguments['x-dead-letter-exchange'] = $exchange['name'];
 
                 // Set routing key for exchanges if declared.
@@ -97,7 +101,7 @@ abstract class BaseHandler
                 false,
                 false,
                 false,
-                $arguments
+                new AMQPTable($arguments)
             );
         }
     }
