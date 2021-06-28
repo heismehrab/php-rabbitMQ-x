@@ -2,12 +2,12 @@
 
 namespace HeIsMehrab\PhpRabbitMq\Core;
 
+use PhpAmqpLib\Wire\AMQPTable;
 use PhpAmqpLib\Channel\AMQPChannel;
 
 use Exception, InvalidArgumentException;
 
 use HeIsMehrab\PhpRabbitMq\Services\RabbitMQ\RabbitMQService;
-use PhpAmqpLib\Wire\AMQPTable;
 
 /**
  * Class BaseHandler.

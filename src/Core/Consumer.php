@@ -37,9 +37,9 @@ class Consumer extends BaseHandler
     /**
      * Get RabbitMQ configuration.
      *
-     * @return array|null
+     * @return array
      */
-    public static function getConfigurations(): ?array
+    public static function getConfigurations(): array
     {
         return static::$configuration;
     }
