@@ -24,15 +24,6 @@ return [
      */
     'prefetch_count' => 5,
 
-    /* ------------------------ RABBITMQ EXCHANGE CONFIGURATION ------------------------ */
-
-    /**
-     * Keep the default exchange, that
-     * must be the one the indexes of EXCHANGES array
-     * defined by yours.
-     */
-    'default_exchange' => '',
-
     /**
      * An associative array witch defines the
      * exchanges and its related type and queues;
