@@ -47,13 +47,19 @@ class Producer extends BaseHandler
     }
 
     /**
-     * Produce messages/tasks to Rabbit queue.
+     * Produce messages/tasks to Rabbitmq.
      *
      * @param string $queueOrRoutingKey
      * Queue name or a routing key, depends on
      * your queue and exchange configuration.
      *
      * @param string $exchange
+     * Set if you have exchanges you want to
+     * work with.
+     *
+     * By default it is set to
+     * an empty string that means no
+     * any exchanges (the producer communicate with queues directly)
      *
      * @return void
      *
@@ -79,5 +85,19 @@ class Producer extends BaseHandler
 
         // Remove un-used data.
         unset($message);
+    }
+
+    /**
+     * Close Rabbitmq channel and connection.
+     *
+     * @return void
+     */
+    public function closeConnections()
+    {
+        try {
+            RabbitMQService::closeConnections();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 }

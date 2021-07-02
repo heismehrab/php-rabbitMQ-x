@@ -45,10 +45,15 @@ class Consumer extends BaseHandler
     }
 
     /**
-     * Produce and message/task to Rabbit queue.
+     * Listen and consume messages/tasks from Rabbitmq.
      *
      * @param string $queue
+     * Specifies the queue which consumer
+     * should listen to.
+     *
      * @param callable $callback
+     * The callable that consumer runs
+     * after getting a new message.
      *
      * @return void
      *
@@ -87,7 +92,23 @@ class Consumer extends BaseHandler
             $this->node->wait();
         }
 
-        // TODO. Handle memory usage and close
-        // TODO. RabbitMQ connections if needed.
+        // Close Rabbitmq channel and connection.
+        $this->closeConnections();
+
+        // TODO. Handle memory usage.
+    }
+
+    /**
+     * Close Rabbitmq channel and connection.
+     *
+     * @return void
+     */
+    public function closeConnections()
+    {
+        try {
+            RabbitMQService::closeConnections();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 }
