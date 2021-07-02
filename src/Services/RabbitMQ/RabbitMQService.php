@@ -3,6 +3,7 @@
 namespace HeIsMehrab\PhpRabbitMq\Services\RabbitMQ;
 
 use Exception;
+
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
