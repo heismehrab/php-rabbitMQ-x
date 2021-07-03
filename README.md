@@ -27,6 +27,12 @@ Before anything, developer has to know that package uses php `>= 7.0` and
 | QOS (Fair dispatching)     | `prefetch-size`, `prefetch-count`       | `0.9.0`, `1.0.0`      |
 
 <br>
+Note that the package always declare queues as <span style="color: lightskyblue"> durable </span> and do only <span style="color: lightskyblue"> manual acknowledgment </span> for messages/tasks,
+so you have to handle some conditions according to acknowledgments in your Consumer callback;
+We do this to be sure that all messages/tasks will be safe and they are not discarded during Rabbitmq dispatching or consumer crashes.  
+
+<br>
+
 install via composer:
 
 ```bash
@@ -205,10 +211,10 @@ try {
 }
 ```
 
-<br>
 To be sure that Producer service closes the connections to Rabbitmq after sending messages/tasks,
 you can call the `closeConnections()` method, this method is available in both Producer and Consumer instances;
 note the Consumer call this method by its own, so you don't need to do that in manual for Consumer services.
+
 <br>
 
 ```php 
