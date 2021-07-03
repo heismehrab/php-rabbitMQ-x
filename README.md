@@ -17,8 +17,8 @@ We suggest that you visit the [official website of Rabbitmq](https://rabbitmq.co
 
 ## Installation.
 
-Before anything, The developer has to know witch the package uses php `>= 7.0` and
-The <span style="color: red"> ONLY </span> features of Rabbitmq which supported by the package explains in below:
+Before anything, developer has to know that package uses php `>= 7.0` and 
+<span style="color: red"> ONLY </span> features of Rabbitmq which supported by the package explains in below:
 
 | titles | Features/Types | version |
 | :---         |     :---:      |          ---: |
@@ -132,14 +132,15 @@ You can see and use the structure of original config file in below:
         ]
     ]
 ];
-```
+``` 
+<br>
 
 For more examples of the configuration file, you can check the [original file](./src/Config/config.php) which placed in package root directory.
 
 ## How the package works?
 When we get an instance of a Producer/Consumer and inject the configuration file into that,
 the service will start validate the file and then declare the queues, exchanges, etc... which explained in above table;
-finally we have a configured RabbitMq instance which is ready to handle messages/tasks. 
+finally we have a configured Rabbitmq instance which is ready to handle messages/tasks. 
 
 ## Examples.
 
@@ -176,6 +177,7 @@ try {
     echo $e->getMessage();
 }
 ```
+<br>
 
 #### Consumer:
 
@@ -207,6 +209,7 @@ try {
 To be sure that Producer service closes the connections to Rabbitmq after sending messages/tasks,
 you can call the `closeConnections()` method, this method is available in both Producer and Consumer instances;
 note the Consumer call this method by its own, so you don't need to do that in manual for Consumer services.
+<br>
 
 ```php 
 $producer->closeConnections();
