@@ -206,6 +206,7 @@ try {
 ```
 
 <br>
+
 To be sure that Producer service closes the connections to Rabbitmq after sending messages/tasks,
 you can call the `closeConnections()` method, this method is available in both Producer and Consumer instances;
 note the Consumer call this method by its own, so you don't need to do that in manual for Consumer services.
